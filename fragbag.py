@@ -28,17 +28,15 @@ def render_template(loaded_template, token_dict):
 
     return template_results
 
-def prompt_for_token_values(contents, tokens):
+def prompt_for_token_values(contents):
+    tokens = get_template_tokens(contents, omit_filters=False)
     replacements = {}
     if len(tokens) == 0:
         return {}
 
     for token in tokens:
         token_value = input(f'{token}: ')
-        if token_value == '' or token_value == None:
-            replacements['field_type'] = ''
-        else:
-            replacements[token] = token_value
+        replacements[token] = token_value
     return replacements
 
 def get_escaped_tokens_delimiter():
@@ -49,7 +47,7 @@ def get_escaped_tokens_delimiter():
 
     return ''.join(escaped_tokens_delimiter)
 
-def get_template_tokens(contents):
+def get_template_tokens(contents, omit_filters=True):
     escaped_tokens_delimiter = get_escaped_tokens_delimiter()
 
     matches = re.finditer(escaped_tokens_delimiter, contents)
@@ -58,7 +56,8 @@ def get_template_tokens(contents):
     tokens = []
     for i in range(0, len(positions), 2):
         current_token = contents[positions[i]+2: positions[i+1]].strip()
-        current_token = re.sub('\s*\|.*$', '', current_token)
+        if omit_filters:
+            current_token = re.sub('\s*\|.*$', '', current_token)
         tokens.append(current_token)
 
         # tokens.append(contents[positions[i]+2: positions[i+1]].strip())
@@ -124,7 +123,7 @@ def main(directory, template, show_tokens, prompt_tokens, subs):
         pyperclip.copy(', '.join(tokens))
         exit(0)
     elif prompt_tokens:
-        template_data = prompt_for_token_values(template_contents, tokens)
+        template_data = prompt_for_token_values(template_contents)
         template_results = render_template(loaded_template, template_data)
     else:
         template_data = convert_tuple_to_dict(subs)
