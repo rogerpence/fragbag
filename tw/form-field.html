@@ -1,0 +1,17 @@
+<!-- ||field_name|| form field -->
+<div class="w-full md:w-1/2 px-3 pb-3">
+    <label class="block uppercase tracking-wide text-gray-500 text-xs
+                  font-bold mb-2"
+           for="last_name">||label||</label>
+    <input class="appearance-none block w-full bg-gray-200 text-gray-700
+                  border border-gray-200 rounded py-3 px-4 leading-tight
+                  focus:outline-none focus:bg-white focus:border-gray-500"
+           id="||field_name||"
+           name="||field_name||"
+           type="||field_type||"
+           placeholder="||placeholder||"
+           value="{{form.||field_name||.value}}">
+    <ul class="pl-2 text-red-600">
+           {{form.||field_name||.errors}}
+    </ul>
+</div>
