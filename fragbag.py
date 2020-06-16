@@ -60,17 +60,11 @@ def get_template_tokens(contents, omit_filters=True):
             current_token = re.sub('\s*\|.*$', '', current_token)
         tokens.append(current_token)
 
-        # tokens.append(contents[positions[i]+2: positions[i+1]].strip())
-
-    tokens = list(OrderedDict.fromkeys(tokens))
-
-
-    return tokens
+    return list(OrderedDict.fromkeys(tokens))
 
 def get_template(file_name):
     contents = rplib.read_file(file_name)
     return contents
-
 
 def confirm_directory(ctx, parm, value):
     if os.path.isdir(value):
